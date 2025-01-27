@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Chatbot.module.css";
 import axios from "axios";
-const OPENAI_API_KEY = 'sk-proj-5bM9rVKz92nl45T6nFeiT3BlbkFJQanCUAwa25vskqOUamb5';
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;//'sk-proj-5bM9rVKz92nl45T6nFeiT3BlbkFJQanCUAwa25vskqOUamb5';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +15,9 @@ const Chatbot = () => {
   const profileData = [
     {
       section: "about",
-      title: `Naveen is a Data Scientist with over 4 years of experience in building scalable AI-driven solutions, data pipelines, and automation workflows. Proficient in Python, RASA, TensorFlow, PyTorch, SQL, AWS, and Big Data technologies like Hadoop and Spark, he has successfully delivered impactful projects, including chatbot integration, stock forecasting,
-     and PDF processing systems. He is a recipient of the AI & Data Pioneer Award for leveraging AI to achieve a 20% increase in revenue and the Cognizant Bronze Cheers Award for outstanding performance and project success. Naveen holds a Bachelor’s in Electronics and Communication Engineering and a Master’s in Data Science, showcasing a strong blend of technical expertise and academic excellence.`   },
+      text: `Naveen is a Data Scientist with over 4 years of experience in building scalable AI-driven solutions, data pipelines, and automation workflows. Proficient in Python, RASA, TensorFlow, PyTorch, SQL, AWS, and Big Data technologies like Hadoop and Spark, he has successfully delivered impactful projects, including chatbot integration, stock forecasting,
+     and PDF processing systems. He is a recipient of the AI & Data Pioneer Award for leveraging AI to achieve a 20% increase in revenue and the Cognizant Bronze Cheers Award for outstanding performance and project success. Naveen holds a Bachelor’s in Electronics and Communication Engineering and a Master’s in Data Science, showcasing a strong blend of technical expertise and academic excellence.`   
+    },
     {
       section: "experience",
       text: `Data Scientist at Corp 2 Corp Inc (August 2024 – Present):
@@ -116,13 +117,19 @@ const Chatbot = () => {
               },
               {
                 headers: {
-                  Authorization: `Bearer ${OPENAI_API_KEY}`,
+                  Authorization: `Bearer ${OPENAI_API_KEY}`, // Use variable here
                   "Content-Type": "application/json",
                 },
               }
             );
-            console.log("Generated Embedding for:", item.text);
-            return { ...item, embedding: response.data.data[0].embedding };
+
+            // Validate embedding length
+            const embedding = response.data.data[0].embedding;
+            if (embedding.length !== 1536) {
+              throw new Error(`Invalid embedding length for section "${item.section}"`);
+            }
+
+            return { ...item, embedding };
           })
         );
         setProfileEmbeddings(embeddedData);
@@ -137,6 +144,10 @@ const Chatbot = () => {
 
   // Semantic Search
   const semanticSearch = (queryEmbedding) => {
+    if (profileEmbeddings.length === 0) {
+      return "Profile data is not available.";
+    }
+
     const distances = profileEmbeddings.map((data) => {
       const similarity = queryEmbedding.reduce(
         (acc, value, index) => acc + value * data.embedding[index],
@@ -170,7 +181,7 @@ const Chatbot = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            Authorization: `Bearer ${OPENAI_API_KEY}`, // Use variable here
             "Content-Type": "application/json",
           },
         }
@@ -190,17 +201,17 @@ const Chatbot = () => {
           messages: [
             {
               role: "system",
-              content: "You are a companion bot answering questions about Naveen's profile. Whenever a quastion is asked, make sure you answer is in a crisk and brief way with important details and make it to the point and small. Make sure you dont provide information from the internet or any other source. Make sure you provide information only from the profile data provided above.",
+              content: "You are a bot answering questions about Naveen's profile. Answer the questions in a straightforward manner. Make sure to provide accurate information from the profile data and be able to answer any other questions through the profile data.",
             },
             {
               role: "user",
-              content: `Relevant info: ${relevantInfo}. Question: Briefly provide details about ${input}`,
+              content: `Relevant info: ${relevantInfo}. Question: Give Brief information about ${input}`,
             },
           ],
         },
         {
           headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            Authorization: `Bearer ${OPENAI_API_KEY}`, // Use variable here
             "Content-Type": "application/json",
           },
         }
@@ -276,5 +287,4 @@ const Chatbot = () => {
     </>
   );
 };
-
 export default Chatbot;
