@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Chatbot.module.css";
 import axios from "axios";
-const OPENAI_API_KEY = import.meta.env.REACT_APP_OPENAI_API_KEY
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
