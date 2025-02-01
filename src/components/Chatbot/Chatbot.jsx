@@ -1,8 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Chatbot.module.css";
 import axios from "axios";
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+let OPENAI_API_KEY = null; // Declare globally
 
+async function fetchApiKey() {
+  try {
+    const response = await fetch("https://backend-d72q.onrender.com/api/key");
+    const data = await response.json();
+    
+    OPENAI_API_KEY = data.apiKey.trim().replace(/^'|'$/g, ""); // ✅ Store the fetched key in a global variable
+    console.log("API Key Fetched and Stored:",OPENAI_API_KEY);
+  } catch (error) {
+    console.error("Error fetching API key:", error);
+  }
+}
+
+// Call fetchApiKey at the start of your application
+fetchApiKey();
+
+// Later in your code, use OPENAI_API_KEY after it's been set
+setTimeout(() => {
+  console.log("Using API Key after fetching:",OPENAI_API_KEY); // It should be available now
+}, 2000);
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
