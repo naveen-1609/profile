@@ -1,18 +1,22 @@
 @import "../../vars.css";
 
+/* ✅ Main Navbar */
 .navbar {
-  position: fixed; /* Fix the navbar at the top */
-  top: 0; /* Stick to the very top of the page */
-  width: 100%; /* Full-width navbar */
+  position: relative; /* Fixed at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 10%;
-  z-index: 1000; /* Ensure it stays above all other elements */
-  background-color: var(--color-dark); /* Background color for better visibility */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  z-index: 1000;
+  background-color: var(--color-dark);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease-in-out;
 }
 
+/* ✅ Website Title */
 .title {
   font-size: 30px;
   font-weight: 600;
@@ -20,15 +24,14 @@
   color: var(--color-text);
 }
 
-
+/* ✅ Hide Menu Button by Default */
 .menuBtn {
   display: none;
+  width: 35px;
+  cursor: pointer;
 }
 
-.menu {
-  display: flex;
-}
-
+/* ✅ Desktop Menu */
 .menuItems {
   display: flex;
   gap: 47px;
@@ -41,43 +44,38 @@
   text-decoration: none;
 }
 
+/* ✅ Mobile View */
 @media screen and (max-width: 830px) {
   .navbar {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .menu {
-    position: absolute;
-    right: 0;
-    margin-right: 10%;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 11px;
-    z-index: 3;
-  }
-
+  /* ✅ Show Menu Button when Scrolling */
   .menuBtn {
     display: block;
-    cursor: pointer;
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 1100;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px;
+    border-radius: 5px;
   }
 
+  /* ✅ Hide Menu by Default */
   .menuItems {
     display: none;
     flex-direction: column;
     align-items: center;
     gap: 13px;
     border-radius: 10px;
-    background: rgb(25, 55, 109);
-    background: linear-gradient(
-      0deg,
-      rgba(25, 55, 109, 0.2) 0%,
-      rgba(25, 55, 109, 1) 100%
-    );
+    background: rgba(25, 55, 109, 0.9);
     padding: 24px 33px;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
   }
 
+  /* ✅ Show Menu when Open */
   .menuOpen {
     display: flex;
     z-index: 1;
