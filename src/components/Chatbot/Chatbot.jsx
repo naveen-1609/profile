@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./Chatbot.module.css";
 import axios from "axios";
 
-const Chatbot = () => {
+export const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -306,4 +306,3 @@ const Chatbot = () => {
     </>
   );
 };
-export default Chatbot;
