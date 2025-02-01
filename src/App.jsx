@@ -6,7 +6,7 @@ import { Hero } from "./components/Hero/Hero";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Projects } from "./components/Projects/Projects";
 import { Skills } from "./components/Skills/Skills";
-import {Chatbot} from "./components/Chatbot/Chatbot";
+import { Chatbot } from "./components/Chatbot/Chatbot";
 function App() {
   return (
     <div className={styles.App}>
